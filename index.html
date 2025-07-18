@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OneSignal Push Notifications Demo</title>
+    <title>OneSignal Push Notifications Debug</title>
     <link rel="manifest" href="/manifest.json">
     <style>
         * {
@@ -27,7 +27,7 @@
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             padding: 40px;
-            max-width: 700px;
+            max-width: 800px;
             width: 100%;
             text-align: center;
         }
@@ -87,7 +87,7 @@
             transform: none;
         }
 
-        .notification-form {
+        .debug-section {
             background: #f8f9fa;
             padding: 20px;
             border-radius: 10px;
@@ -95,132 +95,22 @@
             text-align: left;
         }
 
-        .form-group {
+        .debug-section h3 {
+            color: #333;
             margin-bottom: 15px;
         }
 
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-            font-weight: 500;
-        }
-
-        input, textarea, select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-
-        textarea {
-            height: 80px;
-            resize: vertical;
-        }
-
-        .scheduled-notifications {
-            background: #e8f5e8;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            text-align: left;
-        }
-
-        .scheduled-notification {
-            background: white;
+        .debug-log {
+            background: #000;
+            color: #0f0;
             padding: 15px;
-            border-radius: 8px;
-            margin: 10px 0;
-            border-left: 4px solid #28a745;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .scheduled-notification .info {
-            flex: 1;
-        }
-
-        .scheduled-notification .time {
-            font-size: 12px;
-            color: #666;
-        }
-
-        .scheduled-notification .cancel-btn {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-
-        .diagnostics {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            text-align: left;
-        }
-
-        .diagnostic-item {
-            margin: 10px 0;
-            padding: 10px;
             border-radius: 5px;
-            background: white;
-            border-left: 4px solid #ddd;
-        }
-
-        .diagnostic-item.pass {
-            border-left-color: #28a745;
-        }
-
-        .diagnostic-item.fail {
-            border-left-color: #dc3545;
-        }
-
-        .info-box {
-            background: #e3f2fd;
-            border: 1px solid #2196f3;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-        }
-
-        .info-box h3 {
-            color: #1976d2;
-            margin-bottom: 10px;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .tab {
-            padding: 10px 20px;
-            background: #f8f9fa;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .tab.active {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
+            font-family: monospace;
+            font-size: 12px;
+            height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            margin: 10px 0;
         }
 
         .test-section {
@@ -243,186 +133,200 @@
             margin: 10px 0;
         }
 
-        .notification-history {
-            background: #f0f8ff;
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        textarea {
+            height: 80px;
+            resize: vertical;
+        }
+
+        .config-section {
+            background: #e3f2fd;
             padding: 20px;
             border-radius: 10px;
             margin: 20px 0;
             text-align: left;
         }
 
-        .notification-history h3 {
-            color: #0066cc;
+        .config-section h3 {
+            color: #1976d2;
             margin-bottom: 15px;
         }
 
-        .history-item {
-            background: white;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 8px 0;
-            border-left: 3px solid #0066cc;
+        .error-box {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
         }
 
-        .history-item .timestamp {
+        .error-box h3 {
+            color: #721c24;
+            margin-bottom: 10px;
+        }
+
+        .api-test-section {
+            background: #e8f5e8;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .api-test-section h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+
+        .code-block {
+            background: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
             font-size: 12px;
-            color: #666;
+            overflow-x: auto;
+        }
+
+        .success-indicator {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .fail-indicator {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🔔 Enhanced Push Notifications Demo</h1>
+        <h1>🔍 Updated OneSignal Debug Mode</h1>
         
         <div id="status" class="status warning">
             Initializing OneSignal...
         </div>
 
-        <div class="info-box">
-            <h3>🎯 Test Instructions</h3>
-            <p>1. Click "Subscribe to Notifications" to allow notifications</p>
-            <p>2. Use "Quick Test - 20 Second Timer" to schedule a notification</p>
-            <p>3. Close the website and wait 20 seconds</p>
-            <p>4. You should receive a push notification even when the site is closed!</p>
+        <div class="config-section">
+            <h3>📋 Configuration Check</h3>
+            <div id="configStatus">Checking configuration...</div>
         </div>
 
         <button id="subscribeBtn" onclick="subscribeUser()" disabled>
             Subscribe to Notifications
         </button>
 
+        <div class="api-test-section">
+            <h3>🧪 API Test</h3>
+            <p>This will test your Netlify function directly:</p>
+            <button onclick="testNetlifyFunction()">Test Netlify Function</button>
+            <div id="apiTestResult"></div>
+        </div>
+
         <div class="test-section">
-            <h3>🧪 Quick Test</h3>
-            <p>Test if notifications work when the website is closed:</p>
-            <button onclick="scheduleQuickTest()">Quick Test - 20 Second Timer</button>
-            <div id="quickTestTimer" class="timer-display"></div>
-        </div>
-
-        <div class="notification-form">
-            <h3>Send Custom Notification</h3>
+            <h3>🚀 Push Notification Test</h3>
+            <p>Test actual push notification sending:</p>
             <div class="form-group">
-                <label for="notificationTitle">Title:</label>
-                <input type="text" id="notificationTitle" placeholder="Enter notification title" value="Hello from OneSignal!">
+                <label for="testTitle">Test Title:</label>
+                <input type="text" id="testTitle" value="Debug Test Notification">
             </div>
             <div class="form-group">
-                <label for="notificationMessage">Message:</label>
-                <textarea id="notificationMessage" placeholder="Enter notification message">This is a test notification from your website!</textarea>
+                <label for="testMessage">Test Message:</label>
+                <textarea id="testMessage">This is a debug test notification. If you receive this, your setup is working!</textarea>
             </div>
-            <div class="form-group">
-                <label for="notificationUrl">URL (optional):</label>
-                <input type="url" id="notificationUrl" placeholder="https://example.com">
-            </div>
-            <div class="form-group">
-                <label for="sendTime">Send Time:</label>
-                <select id="sendTime">
-                    <option value="now">Send Now</option>
-                    <option value="10">Send in 10 seconds</option>
-                    <option value="30">Send in 30 seconds</option>
-                    <option value="60">Send in 1 minute</option>
-                    <option value="300">Send in 5 minutes</option>
-                    <option value="custom">Custom delay...</option>
-                </select>
-            </div>
-            <div class="form-group" id="customDelayGroup" style="display: none;">
-                <label for="customDelay">Custom delay (seconds):</label>
-                <input type="number" id="customDelay" placeholder="Enter seconds" min="1">
-            </div>
-            <button onclick="sendCustomNotification()">Send Custom Notification</button>
+            <button onclick="sendDebugNotification()">Send Debug Notification</button>
+            <button onclick="scheduleDebugTest()">Schedule 10-Second Test</button>
+            <div id="testTimer" class="timer-display"></div>
         </div>
 
-        <div class="scheduled-notifications">
-            <h3>📅 Scheduled Notifications</h3>
-            <div id="scheduledList">
-                <p>No scheduled notifications</p>
-            </div>
+        <div class="debug-section">
+            <h3>🐛 Debug Log</h3>
+            <div id="debugLog" class="debug-log">Debug log initialized...\n</div>
+            <button onclick="clearDebugLog()">Clear Log</button>
         </div>
 
-        <div class="notification-history">
-            <h3>📜 Notification History</h3>
-            <div id="notificationHistory">
-                <p>No notifications sent yet</p>
+        <div class="error-box">
+            <h3>❌ Common Issues & Solutions</h3>
+            <p><strong>1. Missing REST API Key:</strong></p>
+            <div class="code-block">
+Go to OneSignal Dashboard → Settings → Keys & IDs
+Copy your "REST API Key" 
+Add to Netlify: Site Settings → Environment Variables
+ONESIGNAL_REST_API_KEY = your_key_here
             </div>
-            <button onclick="clearHistory()">Clear History</button>
-        </div>
-
-        <div class="diagnostics">
-            <h3>Diagnostics</h3>
-            <div id="diagnosticResults">
-                Running diagnostics...
+            
+            <p><strong>2. Missing App ID:</strong></p>
+            <div class="code-block">
+Add to Netlify Environment Variables:
+ONESIGNAL_APP_ID = b5c066e1-250c-4ea1-89f8-9baa22dc401c
             </div>
-            <button onclick="runDiagnostics()">Run Diagnostics</button>
+            
+            <p><strong>3. Netlify Function Not Working:</strong></p>
+            <div class="code-block">
+Check your netlify/functions/send-notification.js file exists
+Check Netlify deploy logs for errors
+Ensure environment variables are set correctly
+            </div>
         </div>
     </div>
 
     <!-- OneSignal SDK -->
     <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" defer></script>
     <script>
-        // Replace with your actual OneSignal App ID
         const ONESIGNAL_APP_ID = 'b5c066e1-250c-4ea1-89f8-9baa22dc401c';
         
         let OneSignal;
         let isSubscribed = false;
         let userId = null;
-        let scheduledNotifications = [];
-        let notificationHistory = [];
-        let quickTestTimer = null;
+        let testTimer = null;
 
-        // Initialize OneSignal
+        // Debug logging
+        function debugLog(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            const logDiv = document.getElementById('debugLog');
+            logDiv.textContent += `[${timestamp}] ${message}\n`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(`[OneSignal Debug] ${message}`);
+        }
+
+        function clearDebugLog() {
+            document.getElementById('debugLog').textContent = 'Debug log cleared...\n';
+        }
+
         window.addEventListener('load', function() {
+            debugLog('Page loaded, initializing OneSignal...');
             initializeOneSignal();
-            loadStoredData();
         });
-
-        // Handle page visibility changes
-        document.addEventListener('visibilitychange', function() {
-            if (document.hidden) {
-                console.log('Page is now hidden');
-                saveDataToStorage();
-            } else {
-                console.log('Page is now visible');
-                loadStoredData();
-                updateScheduledNotifications();
-            }
-        });
-
-        // Save data before page unload
-        window.addEventListener('beforeunload', function() {
-            saveDataToStorage();
-        });
-
-        function saveDataToStorage() {
-            try {
-                const data = {
-                    scheduledNotifications,
-                    notificationHistory,
-                    userId,
-                    timestamp: Date.now()
-                };
-                // Store in memory (can't use localStorage in artifacts)
-                window.notificationData = data;
-                console.log('Data saved to memory');
-            } catch (error) {
-                console.error('Error saving data:', error);
-            }
-        }
-
-        function loadStoredData() {
-            try {
-                const data = window.notificationData;
-                if (data) {
-                    scheduledNotifications = data.scheduledNotifications || [];
-                    notificationHistory = data.notificationHistory || [];
-                    userId = data.userId;
-                    console.log('Data loaded from memory');
-                    updateScheduledNotificationsList();
-                    updateNotificationHistory();
-                }
-            } catch (error) {
-                console.error('Error loading data:', error);
-            }
-        }
 
         async function initializeOneSignal() {
             try {
+                debugLog('Starting OneSignal initialization...');
                 OneSignal = window.OneSignal || [];
                 
                 await OneSignal.init({
@@ -430,155 +334,148 @@
                     allowLocalhostAsSecureOrigin: true,
                 });
 
+                debugLog('OneSignal initialized successfully');
+                
                 // Check if user is already subscribed
                 const isUserSubscribed = await OneSignal.isPushNotificationsEnabled();
+                debugLog(`User subscription status: ${isUserSubscribed}`);
+                
                 updateSubscriptionStatus(isUserSubscribed);
 
                 if (isUserSubscribed) {
                     userId = await OneSignal.getUserId();
-                    console.log('User ID:', userId);
+                    debugLog(`User ID: ${userId}`);
                 }
 
                 // Enable buttons
                 document.getElementById('subscribeBtn').disabled = false;
                 
                 updateStatus('OneSignal initialized successfully!', 'success');
-                
-                // Run initial diagnostics
-                setTimeout(runDiagnostics, 1000);
+                checkConfiguration();
                 
             } catch (error) {
-                console.error('OneSignal initialization error:', error);
+                debugLog(`OneSignal initialization error: ${error.message}`);
                 updateStatus('OneSignal initialization failed: ' + error.message, 'error');
             }
         }
 
+        async function checkConfiguration() {
+            const configDiv = document.getElementById('configStatus');
+            let configHtml = '';
+
+            // Check HTTPS
+            const isHttps = window.location.protocol === 'https:' || window.location.hostname === 'localhost';
+            configHtml += `<div class="${isHttps ? 'success' : 'fail'}-indicator">HTTPS: ${isHttps ? 'OK' : 'REQUIRED'}</div>`;
+
+            // Check App ID
+            const hasAppId = ONESIGNAL_APP_ID !== 'YOUR_APP_ID';
+            configHtml += `<div class="${hasAppId ? 'success' : 'fail'}-indicator">App ID: ${hasAppId ? 'OK' : 'NOT SET'}</div>`;
+
+            // Check browser support
+            const browserSupport = 'serviceWorker' in navigator && 'PushManager' in window;
+            configHtml += `<div class="${browserSupport ? 'success' : 'fail'}-indicator">Browser Support: ${browserSupport ? 'OK' : 'NOT SUPPORTED'}</div>`;
+
+            // Check notification permission
+            const permission = 'Notification' in window ? Notification.permission : 'not supported';
+            configHtml += `<div class="${permission === 'granted' ? 'success' : 'fail'}-indicator">Permission: ${permission}</div>`;
+
+            configDiv.innerHTML = configHtml;
+        }
+
         async function subscribeUser() {
             try {
+                debugLog('Requesting notification permission...');
+                
                 if (!OneSignal) {
                     throw new Error('OneSignal not initialized');
                 }
 
                 updateStatus('Requesting notification permission...', 'warning');
                 const permission = await OneSignal.requestPermission();
+                debugLog(`Permission result: ${permission}`);
                 
                 if (permission) {
+                    debugLog('Registering for push notifications...');
                     await OneSignal.registerForPushNotifications();
                     userId = await OneSignal.getUserId();
+                    debugLog(`User registered with ID: ${userId}`);
+                    
                     updateSubscriptionStatus(true);
                     updateStatus('Successfully subscribed to notifications!', 'success');
-                    console.log('User subscribed with ID:', userId);
+                    checkConfiguration();
                 } else {
-                    updateStatus('Permission denied. You can enable notifications in your browser settings.', 'error');
+                    debugLog('Permission denied by user');
+                    updateStatus('Permission denied. Please enable notifications in your browser settings.', 'error');
                 }
             } catch (error) {
-                console.error('Subscription error:', error);
+                debugLog(`Subscription error: ${error.message}`);
                 updateStatus('Subscription failed: ' + error.message, 'error');
             }
         }
 
-        function scheduleQuickTest() {
+        async function testNetlifyFunction() {
+            debugLog('Testing Netlify function...');
+            const resultDiv = document.getElementById('apiTestResult');
+            
             if (!userId) {
+                resultDiv.innerHTML = '<div class="fail-indicator">Please subscribe to notifications first</div>';
+                return;
+            }
+
+            try {
+                debugLog('Sending test request to Netlify function...');
+                const response = await fetch('/.netlify/functions/send-notification', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        title: 'Netlify Function Test',
+                        message: 'This is a test from the Netlify function',
+                        userId: userId,
+                        url: window.location.href
+                    })
+                });
+
+                debugLog(`Response status: ${response.status}`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    debugLog(`Response data: ${JSON.stringify(data)}`);
+                    
+                    if (data.id) {
+                        resultDiv.innerHTML = `<div class="success-indicator">✅ Netlify function working! Notification ID: ${data.id}</div>`;
+                    } else if (data.errors) {
+                        resultDiv.innerHTML = `<div class="fail-indicator">❌ OneSignal API Error: ${JSON.stringify(data.errors)}</div>`;
+                    } else {
+                        resultDiv.innerHTML = `<div class="fail-indicator">❌ Unexpected response: ${JSON.stringify(data)}</div>`;
+                    }
+                } else {
+                    const errorText = await response.text();
+                    debugLog(`Error response: ${errorText}`);
+                    resultDiv.innerHTML = `<div class="fail-indicator">❌ HTTP ${response.status}: ${errorText}</div>`;
+                }
+            } catch (error) {
+                debugLog(`Netlify function test error: ${error.message}`);
+                resultDiv.innerHTML = `<div class="fail-indicator">❌ Function not available: ${error.message}</div>`;
+            }
+        }
+
+        async function sendDebugNotification() {
+            if (!userId) {
+                debugLog('Cannot send notification - user not subscribed');
                 updateStatus('Please subscribe first', 'warning');
                 return;
             }
 
-            const title = "Quick Test Notification";
-            const message = "This is a 20-second test notification. If you received this while the website was closed, it's working!";
-            const delay = 20;
+            const title = document.getElementById('testTitle').value;
+            const message = document.getElementById('testMessage').value;
 
-            scheduleNotification(title, message, delay, window.location.href);
-            
-            // Start countdown timer
-            startCountdown(delay);
-            
-            updateStatus('Quick test scheduled! Close the website now and wait 20 seconds.', 'success');
-        }
+            debugLog(`Sending debug notification: ${title} - ${message}`);
 
-        function startCountdown(seconds) {
-            const timerDisplay = document.getElementById('quickTestTimer');
-            let remaining = seconds;
-            
-            if (quickTestTimer) {
-                clearInterval(quickTestTimer);
-            }
-            
-            quickTestTimer = setInterval(() => {
-                timerDisplay.textContent = `Test notification in: ${remaining} seconds`;
-                remaining--;
-                
-                if (remaining < 0) {
-                    clearInterval(quickTestTimer);
-                    timerDisplay.textContent = 'Test notification should have been sent!';
-                    setTimeout(() => {
-                        timerDisplay.textContent = '';
-                    }, 5000);
-                }
-            }, 1000);
-        }
-
-        function scheduleNotification(title, message, delaySeconds, url = null) {
-            const scheduledTime = Date.now() + (delaySeconds * 1000);
-            const notification = {
-                id: Date.now() + Math.random(),
-                title,
-                message,
-                url,
-                scheduledTime,
-                delaySeconds
-            };
-
-            scheduledNotifications.push(notification);
-            updateScheduledNotificationsList();
-            saveDataToStorage();
-
-            // Set timeout to send notification
-            setTimeout(() => {
-                sendScheduledNotification(notification);
-            }, delaySeconds * 1000);
-
-            return notification;
-        }
-
-        async function sendScheduledNotification(notification) {
             try {
                 // Try server proxy first
-                const success = await sendViaServerProxy(notification.title, notification.message, notification.url);
-                
-                if (success) {
-                    addToHistory(notification.title, notification.message, 'Server Push', true);
-                    console.log('Scheduled notification sent via server proxy');
-                } else {
-                    // Fallback to browser notification
-                    if (OneSignal && document.visibilityState === 'visible') {
-                        await OneSignal.sendSelfNotification(
-                            notification.title,
-                            notification.message,
-                            notification.url || window.location.href
-                        );
-                        addToHistory(notification.title, notification.message, 'Browser Push', true);
-                        console.log('Scheduled notification sent via browser');
-                    } else {
-                        addToHistory(notification.title, notification.message, 'Failed - No server proxy', false);
-                        console.log('Scheduled notification failed - no server proxy and page not visible');
-                    }
-                }
-            } catch (error) {
-                console.error('Error sending scheduled notification:', error);
-                addToHistory(notification.title, notification.message, 'Error: ' + error.message, false);
-            }
-
-            // Remove from scheduled list
-            scheduledNotifications = scheduledNotifications.filter(n => n.id !== notification.id);
-            updateScheduledNotificationsList();
-            saveDataToStorage();
-        }
-
-        async function sendViaServerProxy(title, message, url) {
-            if (!userId) return false;
-
-            try {
-                // Try Netlify function first
+                debugLog('Attempting to send via Netlify function...');
                 const response = await fetch('/.netlify/functions/send-notification', {
                     method: 'POST',
                     headers: {
@@ -588,164 +485,101 @@
                         title: title,
                         message: message,
                         userId: userId,
-                        url: url || window.location.href
+                        url: window.location.href
                     })
                 });
 
-                return response.ok;
+                if (response.ok) {
+                    const data = await response.json();
+                    debugLog(`Server notification sent successfully: ${JSON.stringify(data)}`);
+                    updateStatus('Debug notification sent via server!', 'success');
+                } else {
+                    const errorText = await response.text();
+                    debugLog(`Server notification failed: ${errorText}`);
+                    
+                    // Fallback to browser notification
+                    debugLog('Falling back to browser notification...');
+                    await OneSignal.sendSelfNotification(
+                        title,
+                        message,
+                        window.location.href
+                    );
+                    debugLog('Browser notification sent successfully');
+                    updateStatus('Debug notification sent via browser (fallback)', 'success');
+                }
             } catch (error) {
-                console.log('Server proxy not available:', error);
-                return false;
+                debugLog(`Debug notification error: ${error.message}`);
+                updateStatus('Failed to send debug notification: ' + error.message, 'error');
             }
         }
 
-        async function sendCustomNotification() {
+        function scheduleDebugTest() {
             if (!userId) {
+                debugLog('Cannot schedule test - user not subscribed');
                 updateStatus('Please subscribe first', 'warning');
                 return;
             }
 
-            const title = document.getElementById('notificationTitle').value;
-            const message = document.getElementById('notificationMessage').value;
-            const url = document.getElementById('notificationUrl').value || window.location.href;
-            const sendTime = document.getElementById('sendTime').value;
-
-            if (!title || !message) {
-                updateStatus('Please fill in title and message', 'warning');
-                return;
-            }
-
-            let delay = 0;
-            if (sendTime === 'custom') {
-                delay = parseInt(document.getElementById('customDelay').value) || 0;
-            } else if (sendTime !== 'now') {
-                delay = parseInt(sendTime);
-            }
-
-            if (delay > 0) {
-                // Schedule notification
-                scheduleNotification(title, message, delay, url);
-                updateStatus(`Notification scheduled for ${delay} seconds from now`, 'success');
-            } else {
-                // Send immediately
-                try {
-                    const success = await sendViaServerProxy(title, message, url);
-                    
-                    if (success) {
-                        addToHistory(title, message, 'Server Push', true);
-                        updateStatus('Custom notification sent successfully via server!', 'success');
-                    } else {
-                        // Fallback to browser notification
-                        await OneSignal.sendSelfNotification(
-                            title,
-                            message,
-                            url
-                        );
-                        addToHistory(title, message, 'Browser Push', true);
-                        updateStatus('Custom notification sent successfully! (Browser only)', 'success');
-                    }
-                } catch (error) {
-                    console.error('Send notification error:', error);
-                    addToHistory(title, message, 'Error: ' + error.message, false);
-                    updateStatus('Failed to send notification: ' + error.message, 'error');
-                }
-            }
-        }
-
-        function addToHistory(title, message, method, success) {
-            const historyItem = {
-                timestamp: new Date().toLocaleString(),
-                title,
-                message,
-                method,
-                success
-            };
+            debugLog('Scheduling 10-second test notification...');
             
-            notificationHistory.unshift(historyItem);
+            // Start countdown
+            let seconds = 10;
+            const timerDiv = document.getElementById('testTimer');
             
-            // Keep only last 10 notifications
-            if (notificationHistory.length > 10) {
-                notificationHistory = notificationHistory.slice(0, 10);
+            if (testTimer) {
+                clearInterval(testTimer);
             }
             
-            updateNotificationHistory();
-            saveDataToStorage();
-        }
-
-        function updateNotificationHistory() {
-            const historyDiv = document.getElementById('notificationHistory');
-            
-            if (notificationHistory.length === 0) {
-                historyDiv.innerHTML = '<p>No notifications sent yet</p>';
-                return;
-            }
-
-            historyDiv.innerHTML = notificationHistory.map(item => `
-                <div class="history-item">
-                    <strong>${item.title}</strong><br>
-                    ${item.message}<br>
-                    <small>Method: ${item.method} | ${item.success ? 'Success' : 'Failed'}</small><br>
-                    <div class="timestamp">${item.timestamp}</div>
-                </div>
-            `).join('');
-        }
-
-        function clearHistory() {
-            notificationHistory = [];
-            updateNotificationHistory();
-            saveDataToStorage();
-        }
-
-        function updateScheduledNotificationsList() {
-            const scheduledList = document.getElementById('scheduledList');
-            
-            if (scheduledNotifications.length === 0) {
-                scheduledList.innerHTML = '<p>No scheduled notifications</p>';
-                return;
-            }
-
-            scheduledList.innerHTML = scheduledNotifications.map(notification => {
-                const scheduledTime = new Date(notification.scheduledTime);
-                const now = new Date();
-                const remainingSeconds = Math.max(0, Math.floor((notification.scheduledTime - now.getTime()) / 1000));
+            testTimer = setInterval(() => {
+                timerDiv.textContent = `Test notification in: ${seconds} seconds`;
+                seconds--;
                 
-                return `
-                    <div class="scheduled-notification">
-                        <div class="info">
-                            <strong>${notification.title}</strong><br>
-                            ${notification.message}<br>
-                            <div class="time">Scheduled for: ${scheduledTime.toLocaleString()} (in ${remainingSeconds}s)</div>
-                        </div>
-                        <button class="cancel-btn" onclick="cancelScheduledNotification(${notification.id})">Cancel</button>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function cancelScheduledNotification(notificationId) {
-            scheduledNotifications = scheduledNotifications.filter(n => n.id !== notificationId);
-            updateScheduledNotificationsList();
-            saveDataToStorage();
-        }
-
-        function updateScheduledNotifications() {
-            // Update display every second
-            setInterval(() => {
-                if (scheduledNotifications.length > 0) {
-                    updateScheduledNotificationsList();
+                if (seconds < 0) {
+                    clearInterval(testTimer);
+                    timerDiv.textContent = 'Sending test notification now...';
+                    
+                    // Send the notification
+                    sendScheduledTestNotification();
                 }
             }, 1000);
+            
+            updateStatus('10-second test scheduled! You can close the website now.', 'success');
         }
 
-        // Handle custom delay visibility
-        document.getElementById('sendTime').addEventListener('change', function() {
-            const customGroup = document.getElementById('customDelayGroup');
-            if (this.value === 'custom') {
-                customGroup.style.display = 'block';
-            } else {
-                customGroup.style.display = 'none';
+        async function sendScheduledTestNotification() {
+            const title = 'Scheduled Test Notification';
+            const message = 'This is a scheduled test notification. If you received this while the website was closed, it works!';
+            
+            debugLog('Sending scheduled test notification...');
+
+            try {
+                const response = await fetch('/.netlify/functions/send-notification', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        title: title,
+                        message: message,
+                        userId: userId,
+                        url: window.location.href
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    debugLog(`Scheduled notification sent successfully: ${JSON.stringify(data)}`);
+                    document.getElementById('testTimer').textContent = 'Test notification sent!';
+                } else {
+                    const errorText = await response.text();
+                    debugLog(`Scheduled notification failed: ${errorText}`);
+                    document.getElementById('testTimer').textContent = 'Test notification failed!';
+                }
+            } catch (error) {
+                debugLog(`Scheduled notification error: ${error.message}`);
+                document.getElementById('testTimer').textContent = 'Test notification error!';
             }
-        });
+        }
 
         function updateSubscriptionStatus(subscribed) {
             isSubscribed = subscribed;
@@ -763,124 +597,8 @@
             const statusDiv = document.getElementById('status');
             statusDiv.textContent = message;
             statusDiv.className = `status ${type}`;
+            debugLog(`Status update: ${message}`);
         }
-
-        async function runDiagnostics() {
-            const diagnosticResults = document.getElementById('diagnosticResults');
-            diagnosticResults.innerHTML = 'Running diagnostics...';
-
-            const diagnostics = [];
-
-            // Check HTTPS
-            diagnostics.push({
-                name: 'HTTPS Check',
-                status: window.location.protocol === 'https:' || window.location.hostname === 'localhost' ? 'pass' : 'fail',
-                message: window.location.protocol === 'https:' || window.location.hostname === 'localhost' ? 'Site is using HTTPS or localhost' : 'Site must use HTTPS for push notifications'
-            });
-
-            // Check OneSignal initialization
-            diagnostics.push({
-                name: 'OneSignal SDK',
-                status: OneSignal ? 'pass' : 'fail',
-                message: OneSignal ? 'OneSignal SDK loaded' : 'OneSignal SDK not loaded'
-            });
-
-            // Check browser support
-            diagnostics.push({
-                name: 'Browser Support',
-                status: 'serviceWorker' in navigator && 'PushManager' in window ? 'pass' : 'fail',
-                message: 'serviceWorker' in navigator && 'PushManager' in window ? 'Browser supports push notifications' : 'Browser does not support push notifications'
-            });
-
-            // Check App ID
-            diagnostics.push({
-                name: 'App ID Configuration',
-                status: ONESIGNAL_APP_ID !== 'YOUR_APP_ID' ? 'pass' : 'fail',
-                message: ONESIGNAL_APP_ID !== 'YOUR_APP_ID' ? 'App ID configured' : 'Please replace YOUR_APP_ID with your actual OneSignal App ID'
-            });
-
-            // Check subscription status
-            if (OneSignal) {
-                try {
-                    const isEnabled = await OneSignal.isPushNotificationsEnabled();
-                    diagnostics.push({
-                        name: 'Subscription Status',
-                        status: isEnabled ? 'pass' : 'fail',
-                        message: isEnabled ? 'User is subscribed to notifications' : 'User is not subscribed to notifications'
-                    });
-                } catch (error) {
-                    diagnostics.push({
-                        name: 'Subscription Status',
-                        status: 'fail',
-                        message: 'Error checking subscription status: ' + error.message
-                    });
-                }
-            }
-
-            // Check permission
-            if ('Notification' in window) {
-                diagnostics.push({
-                    name: 'Notification Permission',
-                    status: Notification.permission === 'granted' ? 'pass' : 'fail',
-                    message: `Notification permission: ${Notification.permission}`
-                });
-            }
-
-            // Server proxy check
-            try {
-                const response = await fetch('/.netlify/functions/send-notification', { 
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ test: true })
-                });
-                diagnostics.push({
-                    name: 'Server Proxy (Netlify)',
-                    status: response.status !== 404 ? 'pass' : 'fail',
-                    message: response.status !== 404 ? 'Netlify function available' : 'Netlify function not found'
-                });
-            } catch (error) {
-                diagnostics.push({
-                    name: 'Server Proxy (Netlify)',
-                    status: 'fail',
-                    message: 'Netlify function not available - notifications will only work when website is open'
-                });
-            }
-
-            // Check manifest
-            diagnostics.push({
-                name: 'Web App Manifest',
-                status: document.querySelector('link[rel="manifest"]') ? 'pass' : 'fail',
-                message: document.querySelector('link[rel="manifest"]') ? 'Manifest linked' : 'Manifest not linked'
-            });
-
-            // Check service worker
-            if ('serviceWorker' in navigator) {
-                try {
-                    const registration = await navigator.serviceWorker.getRegistration();
-                    diagnostics.push({
-                        name: 'Service Worker',
-                        status: registration ? 'pass' : 'fail',
-                        message: registration ? 'Service worker registered' : 'Service worker not registered'
-                    });
-                } catch (error) {
-                    diagnostics.push({
-                        name: 'Service Worker',
-                        status: 'fail',
-                        message: 'Error checking service worker: ' + error.message
-                    });
-                }
-            }
-
-            // Render diagnostics
-            diagnosticResults.innerHTML = diagnostics.map(diagnostic => `
-                <div class="diagnostic-item ${diagnostic.status}">
-                    <strong>${diagnostic.name}:</strong> ${diagnostic.message}
-                </div>
-            `).join('');
-        }
-
-        // Initialize scheduled notifications update
-        updateScheduledNotifications();
     </script>
 </body>
 </html>
