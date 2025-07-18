@@ -2,38 +2,50 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>OneSignal Demo</title>
-
+  <title>OneSignal Notification Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="manifest" href="manifest.json" />
-  <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+  <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script>
 </head>
 <body>
-  <h1>🚀The Push Notification Demo</h1>
-  <button onclick="sendTestNotification()">🔔 Send Test Notification</button>
+  <h1>📢 OneSignal Notification Auto Permission Test</h1>
+  <button onclick="sendTestNotification()">Send Test Notification</button>
 
   <script>
     window.OneSignal = window.OneSignal || [];
-    OneSignal.push(function () {
+    OneSignal.push(function() {
       OneSignal.init({
-        appId: "b5c066e1-250c-4ea1-89f8-9baa22dc401c", // ✅ Replace this
+        appId: "b5c066e1-250c-4ea1-89f8-9baa22dc401c",
         notifyButton: {
-          enable: true,
+          enable: true
         },
+        promptOptions: {
+          slidedown: {
+            enabled: true,
+            autoPrompt: true // 👉 This triggers permission automatically
+          }
+        },
+        serviceWorkerPath: "OneSignalSDKWorker.js",
+        serviceWorkerUpdaterPath: "OneSignalSDKUpdaterWorker.js"
+      });
+
+      // OPTIONAL: Request permission immediately if not already granted
+      OneSignal.isPushNotificationsEnabled().then(function(isEnabled) {
+        if (!isEnabled) {
+          OneSignal.showSlidedownPrompt(); // fallback prompt
+        }
       });
     });
 
     function sendTestNotification() {
-      OneSignal.push(function () {
-        OneSignal.sendSelfNotification(
-          "📢 Hello from YouBuddy!",
-          {
-            body: "Click to open our site!",
-            icon: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
-            url: "https://mdyahhya.github.io/my-onesignal-demo/" // ✅ Replace this
-          }
-        );
-      });
+      OneSignal.sendSelfNotification(
+        "🔔 Hello from OneSignal!",
+        {
+          body: "Auto-prompting notification test from GitHub Pages!",
+          icon: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
+          url: "https://mdyahhya.github.io/my-onesignal-demo/"
+        }
+      );
     }
   </script>
 </body>
