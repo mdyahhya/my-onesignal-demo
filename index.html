@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OneSignal Push Notifications Demo </title>
+    <title>OneSignal Push Notifications Demo</title>
+    <link rel="manifest" href="/manifest.json">
     <style>
         * {
             margin: 0;
@@ -26,7 +27,7 @@
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             padding: 40px;
-            max-width: 600px;
+            max-width: 700px;
             width: 100%;
             text-align: center;
         }
@@ -105,7 +106,7 @@
             font-weight: 500;
         }
 
-        input, textarea {
+        input, textarea, select {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
@@ -116,6 +117,44 @@
         textarea {
             height: 80px;
             resize: vertical;
+        }
+
+        .scheduled-notifications {
+            background: #e8f5e8;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .scheduled-notification {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #28a745;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .scheduled-notification .info {
+            flex: 1;
+        }
+
+        .scheduled-notification .time {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .scheduled-notification .cancel-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
         }
 
         .diagnostics {
@@ -155,31 +194,6 @@
             margin-bottom: 10px;
         }
 
-        .code-block {
-            background: #f4f4f4;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 10px;
-            margin: 10px 0;
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
-            overflow-x: auto;
-        }
-
-        .solution-box {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-            text-align: left;
-        }
-
-        .solution-box h3 {
-            color: #856404;
-            margin-bottom: 10px;
-        }
-
         .tabs {
             display: flex;
             gap: 10px;
@@ -208,115 +222,80 @@
         .tab-content.active {
             display: block;
         }
+
+        .test-section {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .test-section h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+
+        .timer-display {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin: 10px 0;
+        }
+
+        .notification-history {
+            background: #f0f8ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .notification-history h3 {
+            color: #0066cc;
+            margin-bottom: 15px;
+        }
+
+        .history-item {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 8px 0;
+            border-left: 3px solid #0066cc;
+        }
+
+        .history-item .timestamp {
+            font-size: 12px;
+            color: #666;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🔔 Push Notifications Demo 1</h1>
+        <h1>🔔 Enhanced Push Notifications Demo</h1>
         
         <div id="status" class="status warning">
             Initializing OneSignal...
         </div>
 
-        <div class="solution-box">
-            <h3>⚠️ CORS Issue Detected</h3>
-            <p>The "Failed to fetch" error occurs because browsers block direct API calls to external services. Here are the solutions:</p>
-            <div class="tabs">
-                <div class="tab active" onclick="showTab('solution1')">Solution 1: Server Proxy</div>
-                <div class="tab" onclick="showTab('solution2')">Solution 2: OneSignal SDK</div>
-                <div class="tab" onclick="showTab('solution3')">Solution 3: Netlify/Vercel</div>
-            </div>
-            
-            <div id="solution1" class="tab-content active">
-                <h4>Backend Server Proxy (Recommended)</h4>
-                <p>Create a backend endpoint that forwards notifications to OneSignal:</p>
-                <div class="code-block">
-// Node.js Express example
-app.post('/api/send-notification', async (req, res) => {
-  const { title, message, userId } = req.body;
-  
-  try {
-    const response = await fetch('https://onesignal.com/api/v1/notifications', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + process.env.ONESIGNAL_REST_API_KEY
-      },
-      body: JSON.stringify({
-        app_id: process.env.ONESIGNAL_APP_ID,
-        include_player_ids: [userId],
-        headings: {"en": title},
-        contents: {"en": message}
-      })
-    });
-    
-    const data = await response.json();
-    res.json(data);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-                </div>
-            </div>
-            
-            <div id="solution2" class="tab-content">
-                <h4>OneSignal SDK Internal Messaging</h4>
-                <p>Use OneSignal's internal messaging instead of REST API:</p>
-                <div class="code-block">
-// This works without CORS issues
-async function sendInternalNotification() {
-  try {
-    // This method works for in-app notifications
-    await OneSignal.sendSelfNotification(
-      'Test Title',
-      'Test Message',
-      'https://your-site.com'
-    );
-  } catch (error) {
-    console.error('Internal notification error:', error);
-  }
-}
-                </div>
-            </div>
-            
-            <div id="solution3" class="tab-content">
-                <h4>Serverless Functions</h4>
-                <p>Use Netlify Functions or Vercel API routes:</p>
-                <div class="code-block">
-// netlify/functions/send-notification.js
-exports.handler = async (event, context) => {
-  const { title, message, userId } = JSON.parse(event.body);
-  
-  const response = await fetch('https://onesignal.com/api/v1/notifications', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Basic ' + process.env.ONESIGNAL_REST_API_KEY
-    },
-    body: JSON.stringify({
-      app_id: process.env.ONESIGNAL_APP_ID,
-      include_player_ids: [userId],
-      headings: {"en": title},
-      contents: {"en": message}
-    })
-  });
-  
-  return {
-    statusCode: 200,
-    body: JSON.stringify(await response.json())
-  };
-};
-                </div>
-            </div>
+        <div class="info-box">
+            <h3>🎯 Test Instructions</h3>
+            <p>1. Click "Subscribe to Notifications" to allow notifications</p>
+            <p>2. Use "Quick Test - 20 Second Timer" to schedule a notification</p>
+            <p>3. Close the website and wait 20 seconds</p>
+            <p>4. You should receive a push notification even when the site is closed!</p>
         </div>
 
         <button id="subscribeBtn" onclick="subscribeUser()" disabled>
             Subscribe to Notifications
         </button>
 
-        <button id="testBtn" onclick="sendTestNotification()" disabled>
-            Send Test Notification (Browser Only)
-        </button>
+        <div class="test-section">
+            <h3>🧪 Quick Test</h3>
+            <p>Test if notifications work when the website is closed:</p>
+            <button onclick="scheduleQuickTest()">Quick Test - 20 Second Timer</button>
+            <div id="quickTestTimer" class="timer-display"></div>
+        </div>
 
         <div class="notification-form">
             <h3>Send Custom Notification</h3>
@@ -332,7 +311,37 @@ exports.handler = async (event, context) => {
                 <label for="notificationUrl">URL (optional):</label>
                 <input type="url" id="notificationUrl" placeholder="https://example.com">
             </div>
+            <div class="form-group">
+                <label for="sendTime">Send Time:</label>
+                <select id="sendTime">
+                    <option value="now">Send Now</option>
+                    <option value="10">Send in 10 seconds</option>
+                    <option value="30">Send in 30 seconds</option>
+                    <option value="60">Send in 1 minute</option>
+                    <option value="300">Send in 5 minutes</option>
+                    <option value="custom">Custom delay...</option>
+                </select>
+            </div>
+            <div class="form-group" id="customDelayGroup" style="display: none;">
+                <label for="customDelay">Custom delay (seconds):</label>
+                <input type="number" id="customDelay" placeholder="Enter seconds" min="1">
+            </div>
             <button onclick="sendCustomNotification()">Send Custom Notification</button>
+        </div>
+
+        <div class="scheduled-notifications">
+            <h3>📅 Scheduled Notifications</h3>
+            <div id="scheduledList">
+                <p>No scheduled notifications</p>
+            </div>
+        </div>
+
+        <div class="notification-history">
+            <h3>📜 Notification History</h3>
+            <div id="notificationHistory">
+                <p>No notifications sent yet</p>
+            </div>
+            <button onclick="clearHistory()">Clear History</button>
         </div>
 
         <div class="diagnostics">
@@ -353,28 +362,63 @@ exports.handler = async (event, context) => {
         let OneSignal;
         let isSubscribed = false;
         let userId = null;
+        let scheduledNotifications = [];
+        let notificationHistory = [];
+        let quickTestTimer = null;
 
         // Initialize OneSignal
         window.addEventListener('load', function() {
             initializeOneSignal();
+            loadStoredData();
         });
 
-        function showTab(tabId) {
-            // Hide all tab contents
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            
-            // Remove active class from all tabs
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            // Show selected tab content
-            document.getElementById(tabId).classList.add('active');
-            
-            // Add active class to clicked tab
-            event.target.classList.add('active');
+        // Handle page visibility changes
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                console.log('Page is now hidden');
+                saveDataToStorage();
+            } else {
+                console.log('Page is now visible');
+                loadStoredData();
+                updateScheduledNotifications();
+            }
+        });
+
+        // Save data before page unload
+        window.addEventListener('beforeunload', function() {
+            saveDataToStorage();
+        });
+
+        function saveDataToStorage() {
+            try {
+                const data = {
+                    scheduledNotifications,
+                    notificationHistory,
+                    userId,
+                    timestamp: Date.now()
+                };
+                // Store in memory (can't use localStorage in artifacts)
+                window.notificationData = data;
+                console.log('Data saved to memory');
+            } catch (error) {
+                console.error('Error saving data:', error);
+            }
+        }
+
+        function loadStoredData() {
+            try {
+                const data = window.notificationData;
+                if (data) {
+                    scheduledNotifications = data.scheduledNotifications || [];
+                    notificationHistory = data.notificationHistory || [];
+                    userId = data.userId;
+                    console.log('Data loaded from memory');
+                    updateScheduledNotificationsList();
+                    updateNotificationHistory();
+                }
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
         }
 
         async function initializeOneSignal() {
@@ -397,7 +441,6 @@ exports.handler = async (event, context) => {
 
                 // Enable buttons
                 document.getElementById('subscribeBtn').disabled = false;
-                document.getElementById('testBtn').disabled = false;
                 
                 updateStatus('OneSignal initialized successfully!', 'success');
                 
@@ -416,7 +459,6 @@ exports.handler = async (event, context) => {
                     throw new Error('OneSignal not initialized');
                 }
 
-                // Show permission prompt
                 updateStatus('Requesting notification permission...', 'warning');
                 const permission = await OneSignal.requestPermission();
                 
@@ -435,25 +477,125 @@ exports.handler = async (event, context) => {
             }
         }
 
-        async function sendTestNotification() {
+        function scheduleQuickTest() {
             if (!userId) {
                 updateStatus('Please subscribe first', 'warning');
                 return;
             }
 
-            try {
-                // Use OneSignal's internal notification method (works without CORS)
-                await OneSignal.sendSelfNotification(
-                    'Test Notification',
-                    'This is a test notification from your website!',
-                    window.location.href,
-                    'https://onesignal.com/images/notification_logo.png'
-                );
+            const title = "Quick Test Notification";
+            const message = "This is a 20-second test notification. If you received this while the website was closed, it's working!";
+            const delay = 20;
+
+            scheduleNotification(title, message, delay, window.location.href);
+            
+            // Start countdown timer
+            startCountdown(delay);
+            
+            updateStatus('Quick test scheduled! Close the website now and wait 20 seconds.', 'success');
+        }
+
+        function startCountdown(seconds) {
+            const timerDisplay = document.getElementById('quickTestTimer');
+            let remaining = seconds;
+            
+            if (quickTestTimer) {
+                clearInterval(quickTestTimer);
+            }
+            
+            quickTestTimer = setInterval(() => {
+                timerDisplay.textContent = `Test notification in: ${remaining} seconds`;
+                remaining--;
                 
-                updateStatus('Test notification sent successfully! (Browser notification only)', 'success');
+                if (remaining < 0) {
+                    clearInterval(quickTestTimer);
+                    timerDisplay.textContent = 'Test notification should have been sent!';
+                    setTimeout(() => {
+                        timerDisplay.textContent = '';
+                    }, 5000);
+                }
+            }, 1000);
+        }
+
+        function scheduleNotification(title, message, delaySeconds, url = null) {
+            const scheduledTime = Date.now() + (delaySeconds * 1000);
+            const notification = {
+                id: Date.now() + Math.random(),
+                title,
+                message,
+                url,
+                scheduledTime,
+                delaySeconds
+            };
+
+            scheduledNotifications.push(notification);
+            updateScheduledNotificationsList();
+            saveDataToStorage();
+
+            // Set timeout to send notification
+            setTimeout(() => {
+                sendScheduledNotification(notification);
+            }, delaySeconds * 1000);
+
+            return notification;
+        }
+
+        async function sendScheduledNotification(notification) {
+            try {
+                // Try server proxy first
+                const success = await sendViaServerProxy(notification.title, notification.message, notification.url);
+                
+                if (success) {
+                    addToHistory(notification.title, notification.message, 'Server Push', true);
+                    console.log('Scheduled notification sent via server proxy');
+                } else {
+                    // Fallback to browser notification
+                    if (OneSignal && document.visibilityState === 'visible') {
+                        await OneSignal.sendSelfNotification(
+                            notification.title,
+                            notification.message,
+                            notification.url || window.location.href
+                        );
+                        addToHistory(notification.title, notification.message, 'Browser Push', true);
+                        console.log('Scheduled notification sent via browser');
+                    } else {
+                        addToHistory(notification.title, notification.message, 'Failed - No server proxy', false);
+                        console.log('Scheduled notification failed - no server proxy and page not visible');
+                    }
+                }
             } catch (error) {
-                console.error('Send notification error:', error);
-                updateStatus('Failed to send notification: ' + error.message + ' (Try the server proxy solution)', 'error');
+                console.error('Error sending scheduled notification:', error);
+                addToHistory(notification.title, notification.message, 'Error: ' + error.message, false);
+            }
+
+            // Remove from scheduled list
+            scheduledNotifications = scheduledNotifications.filter(n => n.id !== notification.id);
+            updateScheduledNotificationsList();
+            saveDataToStorage();
+        }
+
+        async function sendViaServerProxy(title, message, url) {
+            if (!userId) return false;
+
+            try {
+                // Try Netlify function first
+                const response = await fetch('/.netlify/functions/send-notification', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        title: title,
+                        message: message,
+                        userId: userId,
+                        url: url || window.location.href
+                    })
+                });
+
+                return response.ok;
+            } catch (error) {
+                console.log('Server proxy not available:', error);
+                return false;
             }
         }
 
@@ -466,50 +608,144 @@ exports.handler = async (event, context) => {
             const title = document.getElementById('notificationTitle').value;
             const message = document.getElementById('notificationMessage').value;
             const url = document.getElementById('notificationUrl').value || window.location.href;
+            const sendTime = document.getElementById('sendTime').value;
 
             if (!title || !message) {
                 updateStatus('Please fill in title and message', 'warning');
                 return;
             }
 
-            try {
-                // Method 1: Try Netlify function (if available)
+            let delay = 0;
+            if (sendTime === 'custom') {
+                delay = parseInt(document.getElementById('customDelay').value) || 0;
+            } else if (sendTime !== 'now') {
+                delay = parseInt(sendTime);
+            }
+
+            if (delay > 0) {
+                // Schedule notification
+                scheduleNotification(title, message, delay, url);
+                updateStatus(`Notification scheduled for ${delay} seconds from now`, 'success');
+            } else {
+                // Send immediately
                 try {
-                    const response = await fetch('/.netlify/functions/send-notification', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            title: title,
-                            message: message,
-                            userId: userId,
-                            url: url
-                        })
-                    });
-
-                    if (response.ok) {
-                        updateStatus('Custom notification sent successfully via Netlify!', 'success');
-                        return;
+                    const success = await sendViaServerProxy(title, message, url);
+                    
+                    if (success) {
+                        addToHistory(title, message, 'Server Push', true);
+                        updateStatus('Custom notification sent successfully via server!', 'success');
+                    } else {
+                        // Fallback to browser notification
+                        await OneSignal.sendSelfNotification(
+                            title,
+                            message,
+                            url
+                        );
+                        addToHistory(title, message, 'Browser Push', true);
+                        updateStatus('Custom notification sent successfully! (Browser only)', 'success');
                     }
-                } catch (serverError) {
-                    console.log('Netlify function not available, trying browser method');
+                } catch (error) {
+                    console.error('Send notification error:', error);
+                    addToHistory(title, message, 'Error: ' + error.message, false);
+                    updateStatus('Failed to send notification: ' + error.message, 'error');
                 }
-
-                // Method 2: Browser notification (fallback)
-                await OneSignal.sendSelfNotification(
-                    title,
-                    message,
-                    url,
-                    'https://onesignal.com/images/notification_logo.png'
-                );
-                
-                updateStatus('Custom notification sent successfully! (Browser notification only)', 'success');
-            } catch (error) {
-                console.error('Send notification error:', error);
-                updateStatus('Failed to send notification: ' + error.message + ' (Implement server proxy for full functionality)', 'error');
             }
         }
+
+        function addToHistory(title, message, method, success) {
+            const historyItem = {
+                timestamp: new Date().toLocaleString(),
+                title,
+                message,
+                method,
+                success
+            };
+            
+            notificationHistory.unshift(historyItem);
+            
+            // Keep only last 10 notifications
+            if (notificationHistory.length > 10) {
+                notificationHistory = notificationHistory.slice(0, 10);
+            }
+            
+            updateNotificationHistory();
+            saveDataToStorage();
+        }
+
+        function updateNotificationHistory() {
+            const historyDiv = document.getElementById('notificationHistory');
+            
+            if (notificationHistory.length === 0) {
+                historyDiv.innerHTML = '<p>No notifications sent yet</p>';
+                return;
+            }
+
+            historyDiv.innerHTML = notificationHistory.map(item => `
+                <div class="history-item">
+                    <strong>${item.title}</strong><br>
+                    ${item.message}<br>
+                    <small>Method: ${item.method} | ${item.success ? 'Success' : 'Failed'}</small><br>
+                    <div class="timestamp">${item.timestamp}</div>
+                </div>
+            `).join('');
+        }
+
+        function clearHistory() {
+            notificationHistory = [];
+            updateNotificationHistory();
+            saveDataToStorage();
+        }
+
+        function updateScheduledNotificationsList() {
+            const scheduledList = document.getElementById('scheduledList');
+            
+            if (scheduledNotifications.length === 0) {
+                scheduledList.innerHTML = '<p>No scheduled notifications</p>';
+                return;
+            }
+
+            scheduledList.innerHTML = scheduledNotifications.map(notification => {
+                const scheduledTime = new Date(notification.scheduledTime);
+                const now = new Date();
+                const remainingSeconds = Math.max(0, Math.floor((notification.scheduledTime - now.getTime()) / 1000));
+                
+                return `
+                    <div class="scheduled-notification">
+                        <div class="info">
+                            <strong>${notification.title}</strong><br>
+                            ${notification.message}<br>
+                            <div class="time">Scheduled for: ${scheduledTime.toLocaleString()} (in ${remainingSeconds}s)</div>
+                        </div>
+                        <button class="cancel-btn" onclick="cancelScheduledNotification(${notification.id})">Cancel</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function cancelScheduledNotification(notificationId) {
+            scheduledNotifications = scheduledNotifications.filter(n => n.id !== notificationId);
+            updateScheduledNotificationsList();
+            saveDataToStorage();
+        }
+
+        function updateScheduledNotifications() {
+            // Update display every second
+            setInterval(() => {
+                if (scheduledNotifications.length > 0) {
+                    updateScheduledNotificationsList();
+                }
+            }, 1000);
+        }
+
+        // Handle custom delay visibility
+        document.getElementById('sendTime').addEventListener('change', function() {
+            const customGroup = document.getElementById('customDelayGroup');
+            if (this.value === 'custom') {
+                customGroup.style.display = 'block';
+            } else {
+                customGroup.style.display = 'none';
+            }
+        });
 
         function updateSubscriptionStatus(subscribed) {
             isSubscribed = subscribed;
@@ -556,13 +792,6 @@ exports.handler = async (event, context) => {
                 message: 'serviceWorker' in navigator && 'PushManager' in window ? 'Browser supports push notifications' : 'Browser does not support push notifications'
             });
 
-            // Check CORS issue
-            diagnostics.push({
-                name: 'CORS Issue',
-                status: 'fail',
-                message: 'Direct API calls to OneSignal are blocked by CORS. Use server proxy solution.'
-            });
-
             // Check App ID
             diagnostics.push({
                 name: 'App ID Configuration',
@@ -599,18 +828,47 @@ exports.handler = async (event, context) => {
 
             // Server proxy check
             try {
-                const response = await fetch('/api/send-notification', { method: 'HEAD' });
+                const response = await fetch('/.netlify/functions/send-notification', { 
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ test: true })
+                });
                 diagnostics.push({
-                    name: 'Server Proxy',
+                    name: 'Server Proxy (Netlify)',
                     status: response.status !== 404 ? 'pass' : 'fail',
-                    message: response.status !== 404 ? 'Server proxy endpoint available' : 'Server proxy endpoint not found'
+                    message: response.status !== 404 ? 'Netlify function available' : 'Netlify function not found'
                 });
             } catch (error) {
                 diagnostics.push({
-                    name: 'Server Proxy',
+                    name: 'Server Proxy (Netlify)',
                     status: 'fail',
-                    message: 'Server proxy endpoint not available - implement for full functionality'
+                    message: 'Netlify function not available - notifications will only work when website is open'
                 });
+            }
+
+            // Check manifest
+            diagnostics.push({
+                name: 'Web App Manifest',
+                status: document.querySelector('link[rel="manifest"]') ? 'pass' : 'fail',
+                message: document.querySelector('link[rel="manifest"]') ? 'Manifest linked' : 'Manifest not linked'
+            });
+
+            // Check service worker
+            if ('serviceWorker' in navigator) {
+                try {
+                    const registration = await navigator.serviceWorker.getRegistration();
+                    diagnostics.push({
+                        name: 'Service Worker',
+                        status: registration ? 'pass' : 'fail',
+                        message: registration ? 'Service worker registered' : 'Service worker not registered'
+                    });
+                } catch (error) {
+                    diagnostics.push({
+                        name: 'Service Worker',
+                        status: 'fail',
+                        message: 'Error checking service worker: ' + error.message
+                    });
+                }
             }
 
             // Render diagnostics
@@ -620,6 +878,9 @@ exports.handler = async (event, context) => {
                 </div>
             `).join('');
         }
+
+        // Initialize scheduled notifications update
+        updateScheduledNotifications();
     </script>
 </body>
 </html>
