@@ -1,0 +1,9 @@
+{
+  "name": "YouBuddy Notification Demo",
+  "short_name": "YouBuddy",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "description": "OneSignal push notification demo",
+  "gcm_sender_id": "482941778795"
+}
