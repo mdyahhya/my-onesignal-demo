@@ -3,23 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>The OneSignal Notification Demo</title>
+  <title>OneSignal Demo</title>
 
-  <!-- OneSignal SDK -->
-  <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script>
+  <link rel="manifest" href="manifest.json" />
+  <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
 </head>
 <body>
-  <h1>🚀 Welcome to Push Notification Demo</h1>
-  <p>This demo shows how to use OneSignal on a GitHub Pages or Vercel site.</p>
+  <h1>🚀The Push Notification Demo</h1>
   <button onclick="sendTestNotification()">🔔 Send Test Notification</button>
 
   <script>
     window.OneSignal = window.OneSignal || [];
     OneSignal.push(function () {
       OneSignal.init({
-        appId: "b5c066e1-250c-4ea1-89f8-9baa22dc401c", // ✅ Replace with your App ID
+        appId: "b5c066e1-250c-4ea1-89f8-9baa22dc401c", // ✅ Replace this
         notifyButton: {
-          enable: true, // Show the OneSignal bell icon
+          enable: true,
         },
       });
     });
@@ -27,11 +26,11 @@
     function sendTestNotification() {
       OneSignal.push(function () {
         OneSignal.sendSelfNotification(
-          "🔥 Welcome to My Site!",
+          "📢 Hello from YouBuddy!",
           {
-            body: "Click to open the app!",
+            body: "Click to open our site!",
             icon: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
-            url: "https://mdyahhya.github.io/my-onesignal-demo/", // ✅ Replace with your actual deployed site
+            url: "https://mdyahhya.github.io/my-onesignal-demo/" // ✅ Replace this
           }
         );
       });
