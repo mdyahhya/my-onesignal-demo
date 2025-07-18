@@ -1,7 +1,7 @@
 {
   "name": "YouBuddy Notification Demo",
   "short_name": "YouBuddy",
-  "start_url": "/",
+  "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "description": "OneSignal push notification demo",
