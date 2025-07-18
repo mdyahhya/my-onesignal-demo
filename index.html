@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OneSignal Push Notifications Demo</title>
-    <link rel="manifest" href="/manifest.json">
     <style>
         * {
             margin: 0;
@@ -474,9 +473,9 @@ exports.handler = async (event, context) => {
             }
 
             try {
-                // Method 1: Try server proxy (if available)
+                // Method 1: Try Netlify function (if available)
                 try {
-                    const response = await fetch('/api/send-notification', {
+                    const response = await fetch('/.netlify/functions/send-notification', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -490,11 +489,11 @@ exports.handler = async (event, context) => {
                     });
 
                     if (response.ok) {
-                        updateStatus('Custom notification sent successfully via server!', 'success');
+                        updateStatus('Custom notification sent successfully via Netlify!', 'success');
                         return;
                     }
                 } catch (serverError) {
-                    console.log('Server proxy not available, trying browser method');
+                    console.log('Netlify function not available, trying browser method');
                 }
 
                 // Method 2: Browser notification (fallback)
