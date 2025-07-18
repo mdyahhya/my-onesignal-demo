@@ -1,7 +1,7 @@
 window.OneSignal = window.OneSignal || [];
 OneSignal.push(function () {
   OneSignal.init({
-    appId: "YOUR-ONESIGNAL-APP-ID", // Replace with your real app ID
+    appId: "b5c066e1-250c-4ea1-89f8-9baa22dc401c", // Replace with your real app ID
     notifyButton: {
       enable: true,
     },
