@@ -16,7 +16,7 @@ function sendTestNotification() {
       {
         body: "Click to open your website!",
         icon: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
-        url: "https://your-site-name.vercel.app/notifications.html", // 🔗 Change this to your site
+        url: "https://mdyahhya.github.io/my-onesignal-demo/", // 🔗 Change this to your site
       }
     );
   });
